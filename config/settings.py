@@ -22,7 +22,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'authen_drf'
+    'authen_drf',
+    'vehicle',
 ]
 
 MIDDLEWARE = [
