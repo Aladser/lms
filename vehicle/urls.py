@@ -6,7 +6,7 @@ from vehicle.views import VehicleViewSet
 app_name = VehicleConfig.name
 
 router = DefaultRouter()
-router.register('vehicle', VehicleViewSet, basename='vehicle')
+router.register(r'vehicle', VehicleViewSet, basename='vehicle')
 
 urlpatterns = [] + router.urls
 
