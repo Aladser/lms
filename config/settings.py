@@ -1,10 +1,14 @@
+import os
 from pathlib import Path
 
 from django.conf.global_settings import AUTH_USER_MODEL
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$=s1^jq53q=1f#=y(3-0c50nmqgqx%8_lb=nu%cf-hrme-)0d@'
 DEBUG = True
+
+load_dotenv(BASE_DIR / '.env')
 
 ALLOWED_HOSTS = []
 
@@ -54,11 +58,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": 'project',
-        "USER":'admin',
-        "PASSWORD": 'Database_1821',
-        "HOST": 'localhost',
-        "PORT": 5432,
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
