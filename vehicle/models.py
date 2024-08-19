@@ -12,3 +12,13 @@ class Vehicle(models.Model):
         verbose_name_plural = 'машины'
 
 
+class Bike(models.Model):
+    title = models.CharField(max_length=150, verbose_name='Название')
+    description = models.TextField(verbose_name='описание')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'мотоцикл'
+        verbose_name_plural = 'мотоциклы'
