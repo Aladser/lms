@@ -5,8 +5,9 @@ from authen_drf.models import User
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        # суперпользователь
         User.truncate()
+
+        # суперпользователь
         user = User.objects.create(
             email='admin@test.ru',
             first_name='Админ',
@@ -20,11 +21,11 @@ class Command(BaseCommand):
 
         # обычный пользователь
         user = User.objects.create(
-            email='user@test.ru',
+            email='users@test.ru',
             first_name='Пользователь',
             last_name='Обычный',
             is_staff=True
         )
 
-        user.set_password("user@123")
+        user.set_password("users@123")
         user.save()
