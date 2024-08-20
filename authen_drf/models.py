@@ -21,7 +21,7 @@ class User(TruncateTableMixin, AbstractUser):
     email = models.EmailField(verbose_name='почта', unique=True)
 
     phone = models.CharField(verbose_name='телефон', unique=True, max_length=20, **NULLABLE)
-    avatar = models.ImageField(verbose_name='аватар', upload_to='images/user', **NULLABLE)
+    avatar = models.ImageField(verbose_name='аватар', upload_to='images/users', **NULLABLE)
     token = models.CharField(verbose_name="токен", **NULLABLE, max_length=100)
 
     country = models.ForeignKey(

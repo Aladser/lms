@@ -21,9 +21,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'django_rename_app',
 
     'authen_drf',
-    'vehicle',
+    'lms',
 ]
 
 MIDDLEWARE = [
@@ -92,3 +93,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authen_drf.User'
+
+# СТАТИЧЕСКИЕ ФАЙЛЫ
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# МЕДИА ФАЙЛЫ
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
