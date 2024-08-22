@@ -1,6 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import generics
+from rest_framework import filters, generics
 
 from payment.models import Payment
 from payment.serializers import PaymentSerializer
