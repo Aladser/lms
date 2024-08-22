@@ -43,7 +43,7 @@ class Payment(TruncateTableMixin, models.Model):
         related_name='payments',
         verbose_name='тип',
     )
-    date = models.DateField(verbose_name='Дата платежа', auto_now_add=True)
+    date = models.DateTimeField(verbose_name='Дата платежа', auto_now_add=True)
     value = models.PositiveIntegerField(verbose_name='Сумма')
 
     class Meta:
