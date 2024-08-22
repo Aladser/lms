@@ -29,7 +29,6 @@ class Lesson(TruncateTableMixin, models.Model):
         on_delete=models.CASCADE,
         related_name='lessons',
         verbose_name='курс',
-        **NULLABLE,
     )
 
     class Meta:
@@ -77,7 +76,6 @@ class Payment(TruncateTableMixin, models.Model):
         on_delete=models.CASCADE,
         related_name='payments',
         verbose_name='тип',
-        **NULLABLE,
     )
     date = models.DateField(verbose_name='Дата платежа', auto_now_add=True)
     value = models.PositiveIntegerField(verbose_name='Сумма')
