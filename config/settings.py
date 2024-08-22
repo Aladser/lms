@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'django_rename_app',
+    'django_filters',
 
     'authen_drf',
     'lms',
@@ -57,6 +58,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -88,8 +93,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 NULLABLE = {"null": True, "blank": True}
-
-STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authen_drf.User'
