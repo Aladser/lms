@@ -4,7 +4,7 @@ from lms.models import Course, Lesson
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lessons_count = serializers.SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
