@@ -29,7 +29,6 @@ class Payment(TruncateTableMixin, models.Model):
         on_delete=models.CASCADE,
         related_name='payments',
         verbose_name='курс',
-        **NULLABLE,
     )
     lesson = models.ForeignKey(
         to=Lesson,
@@ -53,4 +52,4 @@ class Payment(TruncateTableMixin, models.Model):
         ordering = ('user', 'course', 'lesson', 'value')
 
     def __str__(self):
-        return f"{self.course} - {str(self.value)}" if self.course else f"{self.lesson} - {str(self.value)}"
+        return f"{self.lesson} - {str(self.value)}" if self.lesson else f"{self.course} - {str(self.value)}"

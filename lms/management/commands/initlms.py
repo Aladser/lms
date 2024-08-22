@@ -18,18 +18,22 @@ class Command(BaseCommand):
             {'name': 'биология'},
         ]
         seed_table(Course, course_list)
-
-        # Предметы
         math = Course.objects.get(name='математика')
         biology = Course.objects.get(name='биология')
+
+        # Предметы
         fractions_name = 'дроби'
-        plants = 'пестики и тычинки'
+        pow_name = 'степени'
+        plants_name = 'пестики и тычинки'
         lesson_list = [
             {'name': fractions_name, 'course': math},
-            {'name': 'степени', 'course': math},
-            {'name': plants, 'course': biology},
+            {'name': pow_name, 'course': math},
+            {'name': plants_name, 'course': biology},
         ]
         seed_table(Lesson, lesson_list)
+        fractions_lesson = get_object_or_404(Lesson, name=fractions_name)
+        pow_lesson = get_object_or_404(Lesson, name=pow_name)
+        plants_lesson = get_object_or_404(Lesson, name=plants_name)
 
         # способоы платежей
         cash_name = 'наличные'
@@ -43,13 +47,12 @@ class Command(BaseCommand):
         non_cash = get_object_or_404(PaymentMethod, name=non_cash_name)
 
         # Платежи
-        lesson_1 = get_object_or_404(Lesson, name=fractions_name)
-        lesson_2 = get_object_or_404(Lesson, name=plants)
+
         payment_list = [
-            {'user':user,'lesson':lesson_1, 'type':cash, 'value':100},
-            {'user':user, 'lesson': lesson_1, 'type': cash, 'value': 200},
-            {'user':user, 'lesson': lesson_2, 'type': non_cash, 'value': 300},
+            {'user':user, 'course': math, 'lesson': fractions_lesson, 'type':cash, 'value':100},
+            {'user':user, 'course': math, 'lesson': pow_lesson, 'type': cash, 'value': 200},
+            {'user':user, 'course': biology, 'lesson': plants_lesson, 'type': non_cash, 'value': 300},
             {'user':user, 'course': math, 'type': non_cash, 'value': 400},
-            {'user':user, 'course': math, 'type': non_cash, 'value': 500}
+            {'user':user, 'course': biology, 'type': non_cash, 'value': 500}
         ]
         seed_table(Payment, payment_list)
