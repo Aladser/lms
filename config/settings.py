@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     'authen_drf',
     'lms',
+    'payment',
 ]
 
 MIDDLEWARE = [

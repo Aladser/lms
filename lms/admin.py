@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from lms.models import Course, Lesson, PaymentMethod, Payment
+from lms.models import Course, Lesson
+from payment.models import PaymentMethod, Payment
 
 
 @admin.register(Lesson)

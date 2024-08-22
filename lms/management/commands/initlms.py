@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404
 
 from authen_drf.models import User
 from libs.seed_table import seed_table
-from lms.models import PaymentMethod, Payment, Course, Lesson
+from lms.models import Course, Lesson
+from payment.models import PaymentMethod, Payment
 
 
 class Command(BaseCommand):
