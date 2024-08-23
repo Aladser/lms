@@ -2,8 +2,8 @@
 
 ## Настройки проекта
 + cоздать файл *.env* в корне проекта с настройками, аналогичными *.env.example*
-* ``python manage.py initusers`` - создать пользователей
-* ``python manage.py initlms`` - сидирование таблиц
+* ``python manage.py createusers`` - создать пользователей
+* ``python manage.py seed`` - сидирование таблиц
 
 ## Модели
 + ``authen_drf``: ``User``, ``Country``
