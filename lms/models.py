@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import SET_NULL
 
 from authen_drf.models import User
 from config.settings import NULLABLE
@@ -9,6 +10,7 @@ class Course(TruncateTableMixin, models.Model):
     name = models.CharField(max_length=100, verbose_name='название')
     description = models.TextField(verbose_name='описание', **NULLABLE)
     preview_image = models.ImageField(verbose_name='превью изображение', upload_to='images/courses', **NULLABLE)
+    owner = models.ForeignKey(User, verbose_name='Создатель', on_delete=SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = 'курс'
@@ -30,6 +32,7 @@ class Lesson(TruncateTableMixin, models.Model):
         related_name='lessons',
         verbose_name='курс',
     )
+    owner = models.ForeignKey(User, verbose_name='Создатель', on_delete=SET_NULL, **NULLABLE)
 
     class Meta:
         verbose_name = 'урок'

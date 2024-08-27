@@ -9,5 +9,5 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'is_active')
+    list_display = ('id', 'first_name', 'last_name', 'email', 'is_active')
     search_fields = ('first_name', 'last_name', 'email')

@@ -8,11 +8,14 @@ from payment.models import PaymentMethod, Payment
 
 
 class Command(BaseCommand):
+    user = User.objects.get(email='user@test.ru')
+    admin = User.objects.get(email='admin@test.ru')
+
     # курсы
     math_name = 'математика'
     bio_name = 'биология'
     course_list = [
-        {'name': 'физика'},
+        {'name': 'физика', 'owner':user},
         {'name': math_name},
         {'name': bio_name},
     ]
@@ -32,8 +35,6 @@ class Command(BaseCommand):
     ]
 
     def handle(self, *args, **kwargs):
-        user = get_object_or_404(User, email='admin@test.ru')
-
         # Курсы
         Seeding.seed_table(Course, self.course_list)
         math = get_object_or_404(Course, name=self.math_name)
@@ -41,7 +42,7 @@ class Command(BaseCommand):
 
         # Предметы
         lesson_list = [
-            {'name': self.fractions_name, 'course': math},
+            {'name': self.fractions_name, 'course': math, 'owner':self.user},
             {'name': self.pow_name, 'course': math},
             {'name': self.plants_name, 'course': biology},
         ]
@@ -57,10 +58,10 @@ class Command(BaseCommand):
 
         # Платежи
         payment_list = [
-            {'user':user, 'course': math, 'lesson': fractions_lesson, 'type':cash, 'value':100},
-            {'user':user, 'course': math, 'lesson': pow_lesson, 'type': cash, 'value': 200},
-            {'user':user, 'course': biology, 'lesson': plants_lesson, 'type': non_cash, 'value': 300},
-            {'user':user, 'course': math, 'type': non_cash, 'value': 400},
-            {'user':user, 'course': biology, 'type': non_cash, 'value': 500}
+            {'user':self.admin, 'course': math, 'lesson': fractions_lesson, 'type':cash, 'value':100},
+            {'user':self.admin, 'course': math, 'lesson': pow_lesson, 'type': cash, 'value': 200},
+            {'user':self.admin, 'course': biology, 'lesson': plants_lesson, 'type': non_cash, 'value': 300},
+            {'user':self.admin, 'course': math, 'type': non_cash, 'value': 400},
+            {'user':self.admin, 'course': biology, 'type': non_cash, 'value': 500}
         ]
         Seeding.seed_table(Payment, payment_list)

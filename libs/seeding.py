@@ -9,11 +9,7 @@ class Seeding:
             :param data_list: массив строк таблицы
         """
 
-        if hasattr(model, 'truncate'):
-            model.truncate()
-        else:
-            model.objects.all().delete()
-
+        Seeding.__reset_autoincrement(model)
         method_obj_list = [model(**param) for param in data_list]
         model.objects.bulk_create(method_obj_list)
 
@@ -26,9 +22,16 @@ class Seeding:
             :param password: пароль пользователей
         """
 
-        model.objects.all().delete()
+        Seeding.__reset_autoincrement(model)
         for user_obj in data_list:
             user = model.objects.create(**user_obj)
             if password is not None:
                 user.set_password(password)
             user.save()
+
+    @staticmethod
+    def __reset_autoincrement(model: Model):
+        if hasattr(model, 'truncate'):
+            model.truncate()
+        else:
+            model.objects.all().delete()
