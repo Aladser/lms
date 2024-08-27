@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 from authen_drf.models import User
 from authen_drf.serializers import UserSerializer
@@ -15,6 +16,7 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
         user = serializer.save(is_active=True)
