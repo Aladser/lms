@@ -2,12 +2,13 @@ from django.core.management import BaseCommand
 from django.contrib.auth.models import Group
 
 from authen_drf.models import User
-from config.settings import MODERATORS_GROUP_NAME
+from config.settings import MODERATORS_GROUP_NAME, USERS_GROUP_NAME
 from libs.seeding import Seeding
 
 
 class Command(BaseCommand):
     moderator_email = 'moderator@test.ru'
+    user_mail = 'user@test.ru'
     user_obj_list = [
         {
             'email': 'admin@test.ru',
@@ -23,7 +24,7 @@ class Command(BaseCommand):
             'is_staff': True
         },
         {
-            'email': 'users@test.ru',
+            'email': user_mail,
             'first_name': 'Пользователь',
             'last_name': 'Обычный',
             'is_staff': True
@@ -41,3 +42,8 @@ class Command(BaseCommand):
         moder = User.objects.get(email=self.moderator_email)
         moder.groups.add(moderators_group)
         moder.save()
+
+        users_group, created = Group.objects.get_or_create(name=USERS_GROUP_NAME)
+        user = User.objects.get(email=self.user_mail)
+        user.groups.add(users_group)
+        user.save()

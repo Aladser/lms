@@ -73,7 +73,7 @@ REST_FRAMEWORK = {
     ]
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -121,3 +121,4 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 MODERATORS_GROUP_NAME = 'moderator'
+USERS_GROUP_NAME = 'user'
