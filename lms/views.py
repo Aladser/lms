@@ -28,6 +28,7 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
             self.permission_classes = [IsAuthenticated, IsOwnerPermission, ~IsModeratorPermission]
         return super().get_permissions()
 
+
 # --- УРОК ---
 # LIST
 class LessonListAPIView(OwnerQuerysetMixin, generics.ListAPIView):
@@ -49,8 +50,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    # не вижу смысла в праве ~IsModeratorPermission, так модератор не может что-то создавать
-    permission_classes = [IsAuthenticated, IsOwnerPermission]
+    permission_classes = [~IsModeratorPermission, IsAuthenticated, IsOwnerPermission]
 
 # UPDATE
 class LessonUpdateAPIView(generics.UpdateAPIView):
