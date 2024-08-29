@@ -22,10 +22,8 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             self.permission_classes = [IsAuthenticated, ~IsModeratorPermission]
-        elif self.action in ['update', 'partial_update']:
-            self.permission_classes = [IsAuthenticated, IsOwnerPermission]
-        elif self.action == 'destroy':
-            self.permission_classes = [IsAuthenticated, IsOwnerPermission, ~IsModeratorPermission]
+        elif self.action in ['update', 'partial_update', 'delete']:
+            self.permission_classes = [IsOwnerPermission]
         return super().get_permissions()
 
 
@@ -35,25 +33,30 @@ class LessonListAPIView(OwnerQuerysetMixin, generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
 
+
 # RETRIEVE
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwnerPermission]
 
+
 # CREATE
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, ~IsModeratorPermission]
 
-# DESTROY
-class LessonDestroyAPIView(generics.DestroyAPIView):
-    serializer_class = LessonSerializer
-    queryset = Lesson.objects.all()
-    permission_classes = [~IsModeratorPermission, IsAuthenticated, IsOwnerPermission]
 
 # UPDATE
 class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [IsOwnerPermission]
+
+
+# DESTROY
+class LessonDestroyAPIView(generics.DestroyAPIView):
+    serializer_class = LessonSerializer
+    queryset = Lesson.objects.all()
+    # нет смысла проверять пользователя на модератора, если у модератора нет прав на создание
     permission_classes = [IsOwnerPermission]
