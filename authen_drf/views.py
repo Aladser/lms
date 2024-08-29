@@ -12,6 +12,7 @@ class UserListAPIView(generics.ListAPIView):
     serializer_class = UserListSerializer
     queryset = User.objects.all()
 
+
 # RETRIEVE
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
@@ -23,6 +24,7 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
         else:
             return UserListSerializer
 
+
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
@@ -33,12 +35,15 @@ class UserCreateAPIView(generics.CreateAPIView):
         user.set_password(user.password)
         user.save()
 
+
 class UserUpdateAPIView(generics.UpdateAPIView):
     serializer_class = UserDetailSerializer
 
     queryset = User.objects.all()
     permission_classes = (IsPersonalProfilePermission,)
 
+
 class UserDestroyAPIView(generics.DestroyAPIView):
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
+    permission_classes = (IsPersonalProfilePermission,)
