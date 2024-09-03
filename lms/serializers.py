@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from lms.models import Course, Lesson
+from lms.models import Course, Lesson, UserSubscription
 from lms.validators import LinkValidator
 
 
@@ -12,9 +12,15 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
         validators = general_validators
 
+class UserSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSubscription
+        fields = '__all__'
+
 class CourseSerializer(serializers.ModelSerializer):
     lesson = LessonSerializer(many=True, source='lessons', read_only=True)
     lessons_count = serializers.SerializerMethodField(read_only=True)
+    is_user_subscription = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
@@ -23,5 +29,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, instance):
         return instance.lessons.all().count()
+
+    def get_is_user_subscription(self, instance):
+        return instance.subscriptions.all().count() > 0
 
 
