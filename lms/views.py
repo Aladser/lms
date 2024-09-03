@@ -66,6 +66,8 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
 # ----- ПОЛЬЗОВАТЕЛЬСКАЯ ПОДПИСКА НА КУРСЫ -----
 class CourseSubscriptionAPIView(APIView):
+    """управление подпиской пользователя на курс"""
+
     permission_classes = [IsAuthenticated]
 
     def post(self, *args, **kwargs):
