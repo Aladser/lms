@@ -61,6 +61,7 @@ class UserSubscription(models.Model):
         verbose_name = 'пользовательская подписка'
         verbose_name_plural = 'пользовательские подписки'
         ordering = ('user', 'course')
+        unique_together = ('user', 'course')
 
     def __str__(self):
         return f"подписка пользователя {self.user} на курс {str(self.course).title()}"

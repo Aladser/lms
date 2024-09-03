@@ -64,9 +64,13 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     permission_classes = [IsOwnerPermission]
 
 
-# ----- ПОЛЬЗОВАТЕЛЬСКАЯ ПОДПИСКА НА КУРСЫ -----
+# ----- УПРАВЛЕНИЕ ПОДПИСКОЙ ПОЛЬЗОВАТЕЛЯ НА КУРС -----
 class CourseSubscriptionAPIView(APIView):
-    """управление подпиской пользователя на курс"""
+    """
+    Управление подпиской пользователя на курс
+
+    подписка определяется наличием записи в таблице UserSubscription
+    """
 
     permission_classes = [IsAuthenticated]
 
@@ -74,10 +78,12 @@ class CourseSubscriptionAPIView(APIView):
         course = get_object_or_404(Course, id=kwargs['pk'])
         action = ''
         try:
+            # удаление подпиской пользователя на курс
             subscription = UserSubscription.objects.get(user=self.request.user, course=course)
             action = f'Удалена {subscription}'
             subscription.delete()
         except:
+            # добавление подпиской пользователя на курс
             subscription = UserSubscription.objects.create(user=self.request.user, course=course)
             action = f"Добавлена {subscription}"
         finally:
