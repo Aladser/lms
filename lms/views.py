@@ -1,10 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from authen_drf.permissions import IsModeratorPermission, IsOwnerPermission
 from libs.owner_queryset import OwnerQuerysetMixin
-from lms.models import Course, Lesson
+from lms.models import Course, Lesson, UserSubscription
 from lms.serializers import CourseSerializer, LessonSerializer
 
 
@@ -58,5 +61,32 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    # нет смысла проверять пользователя на модератора, если у модератора нет прав на создание
     permission_classes = [IsOwnerPermission]
+
+
+# ----- УПРАВЛЕНИЕ ПОДПИСКОЙ ПОЛЬЗОВАТЕЛЯ НА КУРС -----
+class CourseSubscriptionAPIView(APIView):
+    """
+    Управление подпиской пользователя на курс
+
+    подписка определяется наличием записи в таблице UserSubscription
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, *args, **kwargs):
+        course = get_object_or_404(Course, id=kwargs['pk'])
+        action = ''
+        try:
+            # удаление подпиской пользователя на курс
+            subscription = UserSubscription.objects.get(user=self.request.user, course=course)
+            action = f'Удалена {subscription}'
+            subscription.delete()
+        except:
+            # добавление подпиской пользователя на курс
+            subscription = UserSubscription.objects.create(user=self.request.user, course=course)
+            action = f"Добавлена {subscription}"
+        finally:
+            return Response(action)
+
+
