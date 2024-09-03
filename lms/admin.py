@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from lms.models import Course, Lesson
+from lms.models import Course, Lesson, UserSubscription
 
 
 @admin.register(Lesson)
@@ -12,3 +12,8 @@ class LessonAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'owner')
     ordering = ('name',)
+
+@admin.register(UserSubscription)
+class UserSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'course')
+    ordering = ('user', 'course')

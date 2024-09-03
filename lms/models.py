@@ -5,7 +5,7 @@ from authen_drf.models import User
 from config.settings import NULLABLE
 from libs.truncate_table_mixin import TruncateTableMixin
 
-
+# -----КУРС-----
 class Course(TruncateTableMixin, models.Model):
     name = models.CharField(max_length=100, verbose_name='название')
     description = models.TextField(verbose_name='описание', **NULLABLE)
@@ -20,7 +20,7 @@ class Course(TruncateTableMixin, models.Model):
     def __str__(self):
         return self.name
 
-
+# -----УРОК-----
 class Lesson(TruncateTableMixin, models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     description = models.TextField(verbose_name='описание', **NULLABLE)
@@ -41,3 +41,23 @@ class Lesson(TruncateTableMixin, models.Model):
 
     def __str__(self):
         return self.name
+
+# -----ПОЛЬЗОВАТЕЛЬСКАЯ ПОДПИСКА-----
+class UserSubscription(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+        verbose_name='подписка',
+    )
+    course = models.ForeignKey(
+        to=Course,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+        verbose_name='курс',
+    )
+
+    class Meta:
+        verbose_name = 'пользовательская подписка'
+        verbose_name_plural = 'пользовательские подписки'
+        ordering = ('user', 'course')
