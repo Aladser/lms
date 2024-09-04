@@ -8,14 +8,18 @@
 
 ## Модели
 + ``authen_drf``: ``User``, ``Country``
-+ ``lms``: ``Course``, ``Lesson``
++ ``lms``: 
+  + ``Course``, 
+  + ``Lesson``, 
+  + ``UserSubscription`` - подписки пользователей на обновления курсов
 + ``payment``: 
   * ``PaymentMethod`` 
   * ``Payment`` - Платеж. Каждый платеж имеет обязательное поле курса и необязательное поле урока
 
 ## Контроллеры
-+ ``CourseViewSet``
-+ ``LessonListAPIView``, ``LessonRetrieveAPIView``, ``LessonCreateAPIView``, ``LessonUpdateAPIView``, ``LessonDestroyAPIView``
++ ``CourseViewSet``: ``list`` - пагинация
++ ``LessonListAPIView`` - пагинация
++ ``LessonRetrieveAPIView``, ``LessonCreateAPIView``, ``LessonUpdateAPIView``, ``LessonDestroyAPIView``
 + ``UserListAPIView``, ``UserRetrieveAPIView``, ``UserUpdateAPIView``
 + ``PaymentListAPIView``
     * сортировка по дате платежа
@@ -29,6 +33,7 @@
   * ``CourseSerializer``
     + ``lesson`` - уроки курса
     + ``lessons_count`` - число уроков курса
+    + ``is_user_subscription`` - наличие подписки пользователя на обновления курса
   * ``LessonSerializer``
 + ``payment``: ``PaymentSerializer``
 
@@ -42,3 +47,11 @@
 + ``users`` - могут создать, редактировать и удалять свои курсы и уроки
 
 Пользователи могут видеть полную информацию только о своем профиле
+
+## Валидаторы
++ ``lms.validators.LinkValidator`` - проверка наличия ссылок на внешний ресурс кроме ютуба
+
+## Тесты
++ ``LessonTestCase`` - CRUD уроков
++ ``CourseTestCase`` - подписка на курсы
+coverage.txt - покрытие тестами
