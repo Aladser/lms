@@ -35,7 +35,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_is_user_subscription(self, instance):
         auth_user = self.context.get('request').user
-        return UserSubscription.objects.filter(user = auth_user).exists()
+        return UserSubscription.objects.filter(user = auth_user, course=instance).exists()
 
 
 
