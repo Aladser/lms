@@ -48,7 +48,7 @@ class UserSubscription(models.Model):
         to=User,
         on_delete=models.CASCADE,
         related_name='subscriptions',
-        verbose_name='подписка',
+        verbose_name='пользователь',
     )
     course = models.ForeignKey(
         to=Course,

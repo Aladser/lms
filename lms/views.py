@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from authen_drf.permissions import IsModeratorPermission, IsOwnerPermission
 from libs.owner_queryset import OwnerQuerysetMixin
 from lms.models import Course, Lesson, UserSubscription
+from lms.paginators import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer
 
 
@@ -16,6 +17,7 @@ from lms.serializers import CourseSerializer, LessonSerializer
 class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = CustomPagination
 
     def perform_create(self, serializer):
         course = serializer.save()
@@ -35,6 +37,7 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
 class LessonListAPIView(OwnerQuerysetMixin, generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = CustomPagination
 
 
 # RETRIEVE
@@ -87,6 +90,6 @@ class CourseSubscriptionAPIView(APIView):
             subscription = UserSubscription.objects.create(user=self.request.user, course=course)
             action = f"Добавлена {subscription}"
         finally:
-            return Response(action)
+            return Response({'response':action})
 
 
