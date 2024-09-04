@@ -67,3 +67,13 @@ class LessonTestCase(APITestCase):
         response  = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.all().count(), 0)
+
+    def test_course_subscription(self):
+        url = reverse('lms:course_subscription', kwargs={'pk': course_pk})
+        sent_response_str =  f'Добавлена подписка пользователя {self.user} на курс {str(self.course).title()}'
+
+        response = self.client.post(url)
+        received_response_str =response.json()['response']
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(received_response_str, sent_response_str)
+

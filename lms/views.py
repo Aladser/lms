@@ -90,6 +90,6 @@ class CourseSubscriptionAPIView(APIView):
             subscription = UserSubscription.objects.create(user=self.request.user, course=course)
             action = f"Добавлена {subscription}"
         finally:
-            return Response(action)
+            return Response({'response':action})
 
 
