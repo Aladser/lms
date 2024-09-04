@@ -68,6 +68,12 @@ class LessonTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.all().count(), 0)
 
+class CourseTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(**user_params)
+        self.client.force_authenticate(user=self.user)
+        self.course = Course.objects.create(**course_params)
+
     def test_course_subscription(self):
         url = reverse('lms:course_subscription', kwargs={'pk': course_pk})
         sent_response_str =  f'Добавлена подписка пользователя {self.user} на курс {str(self.course).title()}'
