@@ -22,7 +22,6 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     lesson = LessonSerializer(many=True, source='lessons', read_only=True)
     lessons_count = serializers.SerializerMethodField(read_only=True)
-    user = UserDetailSerializer(many=True, source='lessons', read_only=True)
     is_user_subscription = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -35,7 +34,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_is_user_subscription(self, instance):
         auth_user = self.context.get('request').user
-        return UserSubscription.objects.filter(user = auth_user).exists()
+        return UserSubscription.objects.filter(user = auth_user, course=instance).exists()
 
 
 
