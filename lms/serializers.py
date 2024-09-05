@@ -5,14 +5,11 @@ from authen_drf.serializers import UserDetailSerializer
 from lms.models import Course, Lesson, UserSubscription
 from lms.validators import LinkValidator
 
-
-general_validators = [LinkValidator('description'), LinkValidator('name')]
-
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
-        validators = general_validators
+        validators = [LinkValidator('description'), LinkValidator('name'), LinkValidator('video_link')]
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,7 +24,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
-        validators = general_validators
+        validators = [LinkValidator('description'), LinkValidator('name')]
 
     def get_lessons_count(self, instance):
         return instance.lessons.all().count()
