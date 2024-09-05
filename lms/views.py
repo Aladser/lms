@@ -79,17 +79,13 @@ class CourseSubscriptionAPIView(APIView):
 
     def post(self, *args, **kwargs):
         course = get_object_or_404(Course, id=kwargs['pk'])
-        action = ''
-        try:
-            # удаление подпиской пользователя на курс
-            subscription = UserSubscription.objects.get(user=self.request.user, course=course)
-            action = f'Удалена {subscription}'
-            subscription.delete()
-        except:
-            # добавление подпиской пользователя на курс
+        subscription_obj = UserSubscription.objects.filter(user=self.request.user, course=course)
+        if subscription_obj.exists():
+            action = f'Удалена {subscription_obj.first()}'
+            subscription_obj.delete()
+        else:
             subscription = UserSubscription.objects.create(user=self.request.user, course=course)
             action = f"Добавлена {subscription}"
-        finally:
-            return Response({'response':action})
+        return Response({'response':action})
 
 
