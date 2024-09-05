@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_rename_app',
     'django_filters',
+    'drf_yasg',
 
     'authen_drf',
     'lms',
