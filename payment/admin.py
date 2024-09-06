@@ -1,14 +1,8 @@
 from django.contrib import admin
 
-from payment.models import PaymentMethod, Payment
-
-
-@admin.register(PaymentMethod)
-class PaymentMethodAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    ordering = ('name',)
+from payment.models import Payment
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'course', 'lesson', 'type', 'value')
-    ordering = ('user', 'course', '-value')
+    list_display = ('user', 'course', 'lesson', 'amount', 'link', 'session_id')
+    ordering = ('user', 'course', '-amount')
