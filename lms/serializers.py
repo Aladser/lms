@@ -11,11 +11,6 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
         validators = [LinkValidator('description'), LinkValidator('name'), LinkValidator('video_link')]
 
-class UserSubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserSubscription
-        fields = '__all__'
-
 class CourseSerializer(serializers.ModelSerializer):
     lesson = LessonSerializer(many=True, source='lessons', read_only=True)
     lessons_count = serializers.SerializerMethodField(read_only=True)

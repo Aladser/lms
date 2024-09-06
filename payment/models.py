@@ -12,6 +12,7 @@ class Payment(TruncateTableMixin, models.Model):
         to=User,
         on_delete=models.CASCADE,
         related_name='payments',
+        **NULLABLE,
     )
 
     course = models.ForeignKey(
@@ -27,6 +28,8 @@ class Payment(TruncateTableMixin, models.Model):
         related_name='payments',
         **NULLABLE,
     )
+
+    product = f"{course}: {lesson}" if course else lesson
 
     amount = models.PositiveIntegerField(
         verbose_name='стоимость',

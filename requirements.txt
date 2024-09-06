@@ -32,3 +32,6 @@ sqlparse==0.5.1
 typing_extensions==4.12.2
 uritemplate==4.1.1
 urllib3==2.2.2
+
+stripe~=10.10.0
+forex-python~=1.8
