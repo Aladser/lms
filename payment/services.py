@@ -10,7 +10,7 @@ from config.settings import STRIPE_API_KEY
 class StripeService:
     @staticmethod
     def create_price(amount, currency:str = 'usd') -> stripe.Price:
-        """создает цену в stripe"""
+        """Создает цену в stripe"""
 
         stripe.api_key = STRIPE_API_KEY
         return stripe.Price.create(
@@ -21,7 +21,7 @@ class StripeService:
 
     @staticmethod
     def convert_rub_to_usd(amount) -> float:
-        """конвертирует цену рубли -> доллары"""
+        """Конвертирует цены рубль -> доллар"""
 
         # заглушка
         c = CurrencyRates()
@@ -35,7 +35,7 @@ class StripeService:
 
     @staticmethod
     def create_session(price: Price):
-        """создает stripe-сессию"""
+        """Создает stripe-сессию"""
 
         stripe.api_key = STRIPE_API_KEY
         session = stripe.checkout.Session.create(
@@ -44,3 +44,11 @@ class StripeService:
             mode="payment",
         )
         return session.get('id'), session.get('url')
+
+    @staticmethod
+    def get_payment_status(payment):
+        """Возвращает статус платежа"""
+
+        stripe.api_key = STRIPE_API_KEY
+        status = stripe.checkout.Session.retrieve(payment.session_id)
+        return status
