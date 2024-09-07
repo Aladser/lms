@@ -1,7 +1,8 @@
 # LMS
+Документация: http://127.0.0.1:8000/redoc/, http://127.0.0.1:8000/swagger/
 
 ## Настройки проекта
-+ cоздать файл *.env* в корне проекта с настройками, аналогичными *.env.example*
+* Создать файл *.env* в корне проекта с настройками, аналогичными *.env.example*.
 * ``python manage.py createusers`` - создать пользователей
 * ``python manage.py seed`` - сидирование таблиц
 * JWT - авториазция
@@ -12,46 +13,39 @@
   + ``Course``, 
   + ``Lesson``, 
   + ``UserSubscription`` - подписки пользователей на обновления курсов
-+ ``payment``: 
-  * ``PaymentMethod`` 
-  * ``Payment`` - Платеж. Каждый платеж имеет обязательное поле курса и необязательное поле урока
++ ``payment``:
+  * ``Payment`` - Платеж.
+    + user - пользователь
+    + course - курс
+    + lesson - урок
+    + amount - стоимость
+    + session_id - id stripe-сессии
+    + link - ссылка на оплату
 
 ## Контроллеры
-+ ``CourseViewSet``: ``list`` - пагинация
-+ ``LessonListAPIView`` - пагинация
-+ ``LessonRetrieveAPIView``, ``LessonCreateAPIView``, ``LessonUpdateAPIView``, ``LessonDestroyAPIView``
-+ ``UserListAPIView``, ``UserRetrieveAPIView``, ``UserUpdateAPIView``
-+ ``PaymentListAPIView``
-    * сортировка по дате платежа
-    * фильтрация по курсу, уроку, типу платежа
++ lms
+  + ``CourseViewSet``: ``list`` - пагинация
+  + ``LessonListAPIView`` - пагинация
+  + ``LessonRetrieveAPIView``, ``LessonCreateAPIView``, ``LessonUpdateAPIView``, ``LessonDestroyAPIView``
++ payment
+  + ``PaymentListAPIView`` - список всех платежей
+  + ``PaymentCreateAPIView`` - создание оплаты курса
+  + ``show_success_payment`` - страница уведомления об успешной оплате
+  + ``PaymentStatusAPIView`` - информация о статусе платежа
++ authen_drf
+  + ``UserListAPIView``, ``UserRetrieveAPIView``, ``UserUpdateAPIView``
 
 ## Сериализаторы
 + ``authen_drf``: 
     * ``UserSerializer``
-        + ``payments`` - поле платежей пользователя
+    * ``UserDetailSerializer``
 + ``lms``: 
   * ``CourseSerializer``
-    + ``lesson`` - уроки курса
-    + ``lessons_count`` - число уроков курса
-    + ``is_user_subscription`` - наличие подписки пользователя на обновления курса
   * ``LessonSerializer``
-+ ``payment``: ``PaymentSerializer``
++ ``payment``: 
+  * ``PaymentSerializer``
 
 ## Права пользователей
 + ``IsModeratorPermission`` - проверка на модератора
 + ``IsOwnerPermission`` - проверка на создателя объекта
 + ``IsPersonalProfilePermission`` - проверка права редактирования своего пользовательского профиля
-
-## Группы пользователей
-+ ``moderators`` - могут просматривать все курсы и уроки, не могут  создавать, обновлять, удалять их
-+ ``users`` - могут создать, редактировать и удалять свои курсы и уроки
-
-Пользователи могут видеть полную информацию только о своем профиле
-
-## Валидаторы
-+ ``lms.validators.LinkValidator`` - проверка наличия ссылок на внешний ресурс кроме ютуба
-
-## Тесты
-+ ``LessonTestCase`` - CRUD уроков
-+ ``CourseTestCase`` - подписка на курсы
-coverage.txt - покрытие тестами
