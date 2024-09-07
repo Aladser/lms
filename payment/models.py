@@ -57,4 +57,7 @@ class Payment(TruncateTableMixin, models.Model):
         ordering = ('user', 'course', 'lesson', 'amount')
 
     def __str__(self):
-        return f"{self.lesson} - {str(self.amount)}" if self.lesson else f"{self.course} - {str(self.amount)}"
+        if self.lesson:
+            return f"{self.course}: {self.lesson} - {str(self.amount)}"
+        else:
+            return f"{self.course} - {str(self.amount)}"
