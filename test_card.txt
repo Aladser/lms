@@ -1,0 +1,6 @@
+Test card number - Test payment method - rand:
+
+4242424242424242
+visa
+IVAN IVANOV
+10 / 30

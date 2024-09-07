@@ -9,23 +9,29 @@ from config.settings import STRIPE_API_KEY
 
 class StripeService:
     @staticmethod
-    def create_price(amount: int, currency:str = 'usd') -> stripe.Price:
+    def create_price(amount, currency:str = 'usd') -> stripe.Price:
         """создает цену в stripe"""
 
         stripe.api_key = STRIPE_API_KEY
         return stripe.Price.create(
             currency=currency,
-            unit_amount=amount*100,
+            unit_amount=int(amount*100),
             product_data={"name": "Платеж"},
         )
 
     @staticmethod
-    def convert_rub_to_usd(amount) -> int:
-        """конвертирует ценуЖ рубли -> доллары"""
+    def convert_rub_to_usd(amount) -> float:
+        """конвертирует цену рубли -> доллары"""
 
-        #c = CurrencyRates()
-        #rate = c.get_rate('RUB', 'USD')
-        return int(90 * amount)
+        # заглушка
+        c = CurrencyRates()
+        try:
+            rate = c.get_rates('USD')
+            print(rate)
+        except Exception as e:
+            print(e)
+        finally:
+            return amount / 90
 
     @staticmethod
     def create_session(price: Price):
