@@ -28,6 +28,9 @@ class Payment(TruncateTableMixin, models.Model):
         related_name='payments',
         **NULLABLE,
     )
+    @property
+    def product(self):
+        return f"{self.course.name}: {self.lesson.name}" if self.lesson else self.lesson.name
 
     amount = models.PositiveIntegerField(
         verbose_name='стоимость',
@@ -52,9 +55,6 @@ class Payment(TruncateTableMixin, models.Model):
         verbose_name = 'платеж'
         verbose_name_plural = 'платежи'
         ordering = ('user', 'course', 'lesson', 'amount')
-
-    def product(self):
-        return f"{self.course.name}: {self.lesson.name}" if self.lesson else self.lesson.name
 
     def __str__(self):
         return f"{self.lesson} - {str(self.amount)}" if self.lesson else f"{self.course} - {str(self.amount)}"
