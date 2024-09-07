@@ -1,9 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from requests import Request
 from rest_framework import filters, generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from authen_drf.permissions import IsModeratorPermission
 from payment.models import Payment
@@ -11,7 +13,6 @@ from payment.serializers import PaymentSerializer
 from payment.services import StripeService
 
 
-# --- ПЛАТЕЖ ---
 class PaymentListAPIView(generics.ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
@@ -37,7 +38,6 @@ class PaymentCreateAPIView(generics.CreateAPIView):
         payment.link = session_url
         payment.save()
 
-
 def show_success_payment(request: Request) -> HttpResponse:
     """Страница успешного платежа"""
 
@@ -45,3 +45,13 @@ def show_success_payment(request: Request) -> HttpResponse:
         request,
         'success_payment.html',
     )
+
+class PaymentStatusAPIView(APIView):
+    """Проверка статуса оплаты"""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, *args, **kwargs):
+        payment = get_object_or_404(Payment, id=kwargs['pk'])
+        payment_status = StripeService.get_payment_status(payment).get("payment_status")
+        return Response({'response': payment_status})
