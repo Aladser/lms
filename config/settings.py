@@ -5,6 +5,8 @@ from pathlib import Path
 from django.conf.global_settings import AUTH_USER_MODEL
 from dotenv import load_dotenv
 
+NULLABLE = {"null": True, "blank": True}
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$=s1^jq53q=1f#=y(3-0c50nmqgqx%8_lb=nu%cf-hrme-)0d@'
 DEBUG = True
@@ -108,15 +110,13 @@ LANGUAGE_CODE = 'ru-Ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-NULLABLE = {"null": True, "blank": True}
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authen_drf.User'
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 # СТАТИЧЕСКИЕ ФАЙЛЫ
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-
 # МЕДИА ФАЙЛЫ
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

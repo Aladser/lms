@@ -6,50 +6,54 @@ from libs.truncate_table_mixin import TruncateTableMixin
 from lms.models import Course, Lesson
 
 
-class PaymentMethod(TruncateTableMixin, models.Model):
-    name = models.CharField(verbose_name='название', max_length=100)
-    class Meta:
-        verbose_name = 'способ оплаты'
-        verbose_name_plural = 'способы оплаты'
-        ordering = ('name', )
-
-    def __str__(self):
-        return self.name
-
-
 class Payment(TruncateTableMixin, models.Model):
     user = models.ForeignKey(
+        verbose_name='пользователь',
         to=User,
         on_delete=models.CASCADE,
         related_name='payments',
-        verbose_name='пользователь',
+        **NULLABLE,
     )
+
     course = models.ForeignKey(
+        verbose_name='курс',
         to=Course,
         on_delete=models.CASCADE,
         related_name='payments',
-        verbose_name='курс',
     )
     lesson = models.ForeignKey(
+        verbose_name='урок',
         to=Lesson,
         on_delete=models.CASCADE,
         related_name='payments',
-        verbose_name='урок',
         **NULLABLE,
     )
-    type = models.ForeignKey(
-        to=PaymentMethod,
-        on_delete=models.CASCADE,
-        related_name='payments',
-        verbose_name='тип',
+
+    product = f"{course}: {lesson}" if course else lesson
+
+    amount = models.PositiveIntegerField(
+        verbose_name='стоимость',
     )
-    date = models.DateTimeField(verbose_name='Дата платежа', auto_now_add=True)
-    value = models.PositiveIntegerField(verbose_name='Сумма')
+    session_id = models.CharField(
+        verbose_name='id платежной сессии',
+        max_length=255,
+        **NULLABLE,
+    )
+    link = models.URLField(
+        verbose_name="ссылка на страницу платежа",
+        max_length=400,
+        **NULLABLE,
+    )
+
+    date = models.DateTimeField(
+        verbose_name='дата платежа',
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name = 'платеж'
         verbose_name_plural = 'платежи'
-        ordering = ('user', 'course', 'lesson', 'value')
+        ordering = ('user', 'course', 'lesson', 'amount')
 
     def __str__(self):
-        return f"{self.lesson} - {str(self.value)}" if self.lesson else f"{self.course} - {str(self.value)}"
+        return f"{self.lesson} - {str(self.amount)}" if self.lesson else f"{self.course} - {str(self.amount)}"

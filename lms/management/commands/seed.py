@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from authen_drf.models import User
 from libs.seeding import Seeding
 from lms.models import Course, Lesson
-from payment.models import PaymentMethod, Payment
+from payment.models import Payment
 
 
 class Command(BaseCommand):
@@ -51,17 +51,12 @@ class Command(BaseCommand):
         pow_lesson = get_object_or_404(Lesson, name=self.pow_name)
         plants_lesson = get_object_or_404(Lesson, name=self.plants_name)
 
-        # способы платежей
-        Seeding.seed_table(PaymentMethod, self.payment_method_list)
-        cash = get_object_or_404(PaymentMethod, name=self.cash_name)
-        non_cash = get_object_or_404(PaymentMethod, name=self.non_cash_name)
-
         # Платежи
         payment_list = [
-            {'user':self.admin, 'course': math, 'lesson': fractions_lesson, 'type':cash, 'value':100},
-            {'user':self.admin, 'course': math, 'lesson': pow_lesson, 'type': cash, 'value': 200},
-            {'user':self.admin, 'course': biology, 'lesson': plants_lesson, 'type': non_cash, 'value': 300},
-            {'user':self.admin, 'course': math, 'type': non_cash, 'value': 400},
-            {'user':self.admin, 'course': biology, 'type': non_cash, 'value': 500}
+            {'user':self.admin, 'course': math, 'lesson': fractions_lesson, 'amount':100},
+            {'user':self.admin, 'course': math, 'lesson': pow_lesson, 'amount': 200},
+            {'user':self.admin, 'course': biology, 'lesson': plants_lesson, 'amount': 300},
+            {'user':self.admin, 'course': math,'amount': 400},
+            {'user':self.admin, 'course': biology, 'amount': 500}
         ]
         Seeding.seed_table(Payment, payment_list)
