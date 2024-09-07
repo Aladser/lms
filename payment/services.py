@@ -1,7 +1,5 @@
-from uu import Error
-
+import requests
 import stripe
-from forex_python.converter import CurrencyRates
 from stripe import Price
 
 from config.settings import STRIPE_API_KEY
@@ -23,15 +21,10 @@ class StripeService:
     def convert_rub_to_usd(amount) -> float:
         """Конвертирует цены рубль -> доллар"""
 
-        # заглушка
-        c = CurrencyRates()
-        try:
-            rate = c.get_rates('USD')
-            print(rate)
-        except Exception as e:
-            print(e)
-        finally:
-            return amount / 90
+        data = requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
+        rate = data['Valute']['USD']['Value']
+
+        return amount / rate
 
     @staticmethod
     def create_session(price: Price):
