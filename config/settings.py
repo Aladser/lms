@@ -12,6 +12,7 @@ SECRET_KEY = 'django-insecure-$=s1^jq53q=1f#=y(3-0c50nmqgqx%8_lb=nu%cf-hrme-)0d@
 DEBUG = True
 
 load_dotenv(BASE_DIR / '.env')
+SERVICE_ADDR = os.getenv('SERVICE_ADDR') if os.getenv('SERVICE_ADDR') is not None else 'http://127.0.0.1:8000'
 
 ALLOWED_HOSTS = []
 

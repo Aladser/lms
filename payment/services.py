@@ -1,10 +1,9 @@
-from uu import Error
-
+import requests
 import stripe
-from forex_python.converter import CurrencyRates
+from django.urls import reverse
 from stripe import Price
 
-from config.settings import STRIPE_API_KEY
+from config.settings import STRIPE_API_KEY, SERVICE_ADDR
 
 
 class StripeService:
@@ -23,15 +22,11 @@ class StripeService:
     def convert_rub_to_usd(amount) -> float:
         """Конвертирует цены рубль -> доллар"""
 
-        # заглушка
-        c = CurrencyRates()
-        try:
-            rate = c.get_rates('USD')
-            print(rate)
-        except Exception as e:
-            print(e)
-        finally:
-            return amount / 90
+        api_addr = 'https://www.cbr-xml-daily.ru/daily_json.js'
+        data = requests.get(api_addr).json()
+        rate = data['Valute']['USD']['Value']
+
+        return amount / rate
 
     @staticmethod
     def create_session(price: Price):
@@ -39,7 +34,7 @@ class StripeService:
 
         stripe.api_key = STRIPE_API_KEY
         session = stripe.checkout.Session.create(
-            success_url="http://127.0.0.1:8000/payment/success",
+            success_url=f"{SERVICE_ADDR}/{reverse('payment:success')}",
             line_items=[{"price": price.get('id'), "quantity": 1}],
             mode="payment",
         )
