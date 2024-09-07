@@ -1,6 +1,6 @@
-Test card number - Test payment method - rand:
-
+ номер карты:
 4242424242424242
-visa
+ владелец:
 IVAN IVANOV
+ срок:
 10 / 30

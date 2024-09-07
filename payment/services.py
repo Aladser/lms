@@ -1,8 +1,9 @@
 import requests
 import stripe
+from django.urls import reverse
 from stripe import Price
 
-from config.settings import STRIPE_API_KEY
+from config.settings import STRIPE_API_KEY, SERVICE_ADDR
 
 
 class StripeService:
@@ -21,7 +22,8 @@ class StripeService:
     def convert_rub_to_usd(amount) -> float:
         """Конвертирует цены рубль -> доллар"""
 
-        data = requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
+        api_addr = 'https://www.cbr-xml-daily.ru/daily_json.js'
+        data = requests.get(api_addr).json()
         rate = data['Valute']['USD']['Value']
 
         return amount / rate
@@ -32,7 +34,7 @@ class StripeService:
 
         stripe.api_key = STRIPE_API_KEY
         session = stripe.checkout.Session.create(
-            success_url="http://127.0.0.1:8000/payment/success",
+            success_url=f"{SERVICE_ADDR}/{reverse('payment:success')}",
             line_items=[{"price": price.get('id'), "quantity": 1}],
             mode="payment",
         )
