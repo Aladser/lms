@@ -8,14 +8,14 @@ from config.settings import STRIPE_API_KEY, SERVICE_ADDR
 
 class StripeService:
     @staticmethod
-    def create_price(amount, currency:str = 'usd') -> stripe.Price:
+    def create_price(product_name, amount, currency:str = 'usd') -> stripe.Price:
         """Создает цену в stripe"""
 
         stripe.api_key = STRIPE_API_KEY
         return stripe.Price.create(
             currency=currency,
             unit_amount=int(amount*100),
-            product_data={"name": "Платеж"},
+            product_data={"name": product_name},
         )
 
     @staticmethod
