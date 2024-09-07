@@ -32,7 +32,7 @@ class PaymentCreateAPIView(generics.CreateAPIView):
         payment.save()
 
         usd_amount = StripeService.convert_rub_to_usd(payment.amount)
-        stripe_price = StripeService.create_price(usd_amount)
+        stripe_price = StripeService.create_price(payment.product(), usd_amount)
         session_id, session_url = StripeService.create_session(stripe_price)
         payment.session_id = session_id
         payment.link = session_url
