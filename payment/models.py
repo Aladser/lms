@@ -29,7 +29,7 @@ class Payment(TruncateTableMixin, models.Model):
         **NULLABLE,
     )
     @property
-    def product(self):
+    def product_name(self):
         return f"{self.course.name}: {self.lesson.name}" if self.lesson else self.lesson.name
 
     amount = models.PositiveIntegerField(
