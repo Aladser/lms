@@ -53,5 +53,5 @@ class PaymentStatusAPIView(APIView):
 
     def get(self, *args, **kwargs):
         payment = get_object_or_404(Payment, id=kwargs['pk'])
-        payment_status = StripeService.get_payment_status(payment).get("payment_status")
+        payment_status = StripeService.get_payment_status(payment)
         return Response({'response': payment_status})
