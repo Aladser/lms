@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_rename_app',
     'django_filters',
     'drf_yasg',
+    'django-celery-beat',
 
     'authen_drf',
     'lms',
@@ -124,3 +125,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MODERATORS_GROUP_NAME = 'moderator'
 USERS_GROUP_NAME = 'user'
+
+CELERY_BROKER_URL = os.getenv('CELERY_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_URL')
+CELERY_BEAT_SHEDULE = {
+    'task': 'lms.tasks.my_task',
+    'shedule': timedelta(minutes=1),
+}
