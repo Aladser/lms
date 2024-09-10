@@ -1,6 +1,11 @@
+from datetime import datetime
+
+import pytz
 from celery import shared_task
 from django.core.mail import send_mail
 
+from authen_drf.models import User
+from config import settings
 from config.settings import EMAIL_HOST_USER
 from lms.models import Course, UserSubscription
 
@@ -30,4 +35,15 @@ def send_course_updating_notification(course_id):
 def check_user_activities():
     """Периодическая задача проверки активности пользователя"""
 
-    return 'check_user_activities'
+    info = []
+
+    datetime_now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+    for user in User.objects.all():
+        if user.last_login is None:
+            continue
+
+        lastlogin_interval = (datetime_now - user.last_login).days
+        info.append(lastlogin_interval)
+
+    return info
+

@@ -1,5 +1,11 @@
-from rest_framework import generics
+from datetime import datetime
+
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from authen_drf.models import User
 from authen_drf.permissions import IsPersonalProfilePermission
@@ -24,7 +30,7 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
         else:
             return UserListSerializer
 
-
+# CREATE
 class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
@@ -35,7 +41,7 @@ class UserCreateAPIView(generics.CreateAPIView):
         user.set_password(user.password)
         user.save()
 
-
+# UPDATE
 class UserUpdateAPIView(generics.UpdateAPIView):
     serializer_class = UserDetailSerializer
 
@@ -43,7 +49,25 @@ class UserUpdateAPIView(generics.UpdateAPIView):
     permission_classes = (IsPersonalProfilePermission,)
 
 
+# DESTROY
 class UserDestroyAPIView(generics.DestroyAPIView):
     serializer_class = UserDetailSerializer
     queryset = User.objects.all()
     permission_classes = (IsPersonalProfilePermission,)
+
+# --- АВТОРИЗАЦИЯ ---
+class LoginView(TokenObtainPairView):
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        # обновление времени входа
+        authuser = User.objects.get(email=serializer.__dict__['_kwargs']['data']['email'])
+        authuser.last_login = datetime.now()
+        authuser.save()
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
