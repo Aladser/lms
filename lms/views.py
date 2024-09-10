@@ -1,3 +1,7 @@
+from datetime import datetime, timedelta
+
+import pytz
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -33,19 +37,16 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
 
     def perform_update(self, serializer):
         course = serializer.save()
-        subscriptions = UserSubscription.objects.filter(course=course)
 
-        if subscriptions.count == 0:
-            return
+        datetime_now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        last_updated_at = datetime_now - course.updated_at
 
-        subject = f"Обновлен курс {course}"
-        message = (f""
-                   f"Название: {course.name}\n"
-                   f"Описание:{course.description}\n"
-                   f"Создан пользователем {course.owner}")
-        email_list = tuple(subscription.user.email for subscription in subscriptions)
-        send_result = send_course_updating_notification.delay(subject, message, email_list)
-        print(f"Отправка писем. ID={send_result}")
+        if last_updated_at.total_seconds() > 60*60*4:
+            send_course_updating_notification.delay(course.pk)
+
+        course.updated_at = datetime_now
+        course.save()
+
 
 # --- УРОК ---
 # LIST

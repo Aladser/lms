@@ -10,7 +10,7 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'owner')
+    list_display = ('id', 'name', 'owner', 'updated_at')
     ordering = ('name',)
 
 @admin.register(UserSubscription)

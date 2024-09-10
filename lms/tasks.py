@@ -2,11 +2,25 @@ from celery import shared_task
 from django.core.mail import send_mail
 
 from config.settings import EMAIL_HOST_USER
+from lms.models import Course, UserSubscription
 
 
 @shared_task
-def send_course_updating_notification(subject: str, message: str, email_list:tuple):
-    response = send_mail(subject,message,EMAIL_HOST_USER,email_list)
-    return "Отправлено" if response == 1 else response
+def send_course_updating_notification(course_id):
+    course =  Course.objects.get(pk=course_id)
+    subscriptions = UserSubscription.objects.filter(course=course)
+
+    if subscriptions.count == 0:
+        return "Нет пользователей для отправки уведомлений"
+
+    subject = f"Обновлен курс {course}"
+    message = (f""
+               f"Название: {course.name}\n"
+               f"Описание:{course.description}\n"
+               f"Создан пользователем {course.owner}")
+    email_list = tuple(subscription.user.email for subscription in subscriptions)
+
+    response = send_mail(subject, message, EMAIL_HOST_USER, email_list)
+    return f"Отправлены почтовые уведомления на обновление курса {course}" if response == 1 else response
 
 

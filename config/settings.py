@@ -77,7 +77,7 @@ REST_FRAMEWORK = {
     ]
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=180),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -108,7 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'ru-Ru'
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Yakutsk"
+
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
