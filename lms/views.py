@@ -39,9 +39,9 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
         course = serializer.save()
 
         datetime_now = datetime.now(pytz.timezone(settings.TIME_ZONE))
-        last_updated_at = datetime_now - course.updated_at
+        last_updated_interval = datetime_now - course.updated_at
 
-        if last_updated_at.total_seconds() > 60*60*4:
+        if last_updated_interval.total_seconds() > 60*60*4:
             send_course_updating_notification.delay(course.pk)
 
         course.updated_at = datetime_now

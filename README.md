@@ -33,7 +33,7 @@
 
 ## Контроллеры
 + lms
-  + ``CourseViewSet``: ``list`` - пагинация
+  + ``CourseViewSet``: ``list`` - пагинация, ``create`` - отправка почтовых уведомлений об изменении курса
   + ``LessonListAPIView`` - пагинация
   + ``LessonRetrieveAPIView``, ``LessonCreateAPIView``, ``LessonUpdateAPIView``, ``LessonDestroyAPIView``
 + payment
@@ -42,7 +42,10 @@
   + ``show_success_payment`` - страница уведомления об успешной оплате
   + ``PaymentStatusAPIView`` - информация о статусе платежа
 + authen_drf
-  + ``UserListAPIView``, ``UserRetrieveAPIView``, ``UserUpdateAPIView``
+  + ``UserListAPIView``
+  + ``UserRetrieveAPIView``
+  + ``UserUpdateAPIView``
+  + ``LoginView``(авторизация, обновление даты последней авторизации)
 
 ## Сериализаторы
 + ``authen_drf``: 
@@ -61,4 +64,4 @@
 
 ## Асихронные задачи
 + ``lms.send_course_updating_notification`` - Отправляет отложенно почтовые уведомления об обновлении курса
-+ ``authen_drf.check_user_activities`` - Периодическая  проверка активности пользователей"
++ ``authen_drf.check_user_activities`` - Периодическая проверка активности пользователей"
