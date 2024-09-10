@@ -17,12 +17,12 @@
   + ``UserSubscription`` - подписки пользователей на обновления курсов
 + ``payment``:
   * ``Payment`` - Платеж.
-    + user - пользователь
-    + course - курс
-    + lesson - урок
-    + amount - стоимость
-    + session_id - id stripe-сессии
-    + link - ссылка на оплату
+    + ``user`` - пользователь
+    + ``course`` - курс
+    + ``lesson`` - урок
+    + ``amount`` - стоимость
+    + ``session_id`` - id stripe-сессии
+    + ``link`` - ссылка на оплату
 
 ## Контроллеры
 + lms
@@ -51,3 +51,7 @@
 + ``IsModeratorPermission`` - проверка на модератора
 + ``IsOwnerPermission`` - проверка на создателя объекта
 + ``IsPersonalProfilePermission`` - проверка права редактирования своего пользовательского профиля
+
+## Асихронные задачи
++ ``lms.send_course_updating_notification`` - Отправляет отложенно почтовые уведомления об обновлении курса
++ ``authen_drf.check_user_activities`` - Периодическая  проверка активности пользователей"
