@@ -58,16 +58,10 @@ class UserDestroyAPIView(generics.DestroyAPIView):
 # --- АВТОРИЗАЦИЯ ---
 class LoginView(TokenObtainPairView):
     def post(self, request: Request, *args, **kwargs) -> Response:
-        serializer = self.get_serializer(data=request.data)
-
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
 
         # обновление времени входа
-        authuser = User.objects.get(email=serializer.__dict__['_kwargs']['data']['email'])
+        authuser = User.objects.get(email=request.data['email'])
         authuser.last_login = datetime.now()
         authuser.save()
 
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        return super().post(request, *args, **kwargs)
