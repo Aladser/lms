@@ -35,6 +35,9 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
         course = serializer.save()
         subscriptions = UserSubscription.objects.filter(course=course)
 
+        if subscriptions.count == 0:
+            return
+
         subject = f"Обновлен курс {course}"
         message = (f""
                    f"Название: {course.name}\n"
@@ -42,7 +45,7 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
                    f"Создан пользователем {course.owner}")
         email_list = tuple(subscription.user.email for subscription in subscriptions)
         send_result = send_course_updating_notification.delay(subject, message, email_list)
-        print(f"Отправка писем.\n ID={send_result}")
+        print(f"Отправка писем. ID={send_result}")
 
 # --- УРОК ---
 # LIST
