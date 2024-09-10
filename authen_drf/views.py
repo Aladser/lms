@@ -58,10 +58,11 @@ class UserDestroyAPIView(generics.DestroyAPIView):
 # --- АВТОРИЗАЦИЯ ---
 class LoginView(TokenObtainPairView):
     def post(self, request: Request, *args, **kwargs) -> Response:
+        response = super().post(request, *args, **kwargs)
 
         # обновление времени входа
         authuser = User.objects.get(email=request.data['email'])
         authuser.last_login = datetime.now()
         authuser.save()
 
-        return super().post(request, *args, **kwargs)
+        return  response
