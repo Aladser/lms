@@ -1,3 +1,7 @@
+from datetime import datetime
+
+import pytz
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -10,19 +14,14 @@ from libs.owner_queryset import OwnerQuerysetMixin
 from lms.models import Course, Lesson, UserSubscription
 from lms.paginators import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer
+from lms.tasks import send_course_updating_notification
 
 
 # --- КУРС ---
-# VIEWSET
 class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = CustomPagination
-
-    def perform_create(self, serializer):
-        course = serializer.save()
-        course.owner = self.request.user
-        course.save()
 
     def get_permissions(self):
         if self.action == 'create':
@@ -30,6 +29,23 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
         elif self.action in ['update', 'partial_update', 'delete']:
             self.permission_classes = [IsOwnerPermission]
         return super().get_permissions()
+
+    def perform_create(self, serializer):
+        course = serializer.save()
+        course.owner = self.request.user
+        course.save()
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+
+        datetime_now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        last_updated_at = datetime_now - course.updated_at
+
+        if last_updated_at.total_seconds() > 60*60*4:
+            send_course_updating_notification.delay(course.pk)
+
+        course.updated_at = datetime_now
+        course.save()
 
 
 # --- УРОК ---

@@ -11,6 +11,7 @@ class Course(TruncateTableMixin, models.Model):
     description = models.TextField(verbose_name='описание', **NULLABLE)
     preview_image = models.ImageField(verbose_name='превью изображение', upload_to='images/courses', **NULLABLE)
     owner = models.ForeignKey(User, verbose_name='Создатель', on_delete=SET_NULL, **NULLABLE)
+    updated_at = models.DateTimeField(verbose_name="Дата и время обновления", auto_now_add=True)
 
     class Meta:
         verbose_name = 'курс'
