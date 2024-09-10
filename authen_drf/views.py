@@ -1,15 +1,14 @@
 from datetime import datetime
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from authen_drf.models import User
 from authen_drf.permissions import IsPersonalProfilePermission
-from authen_drf.serializers import  UserListSerializer, UserDetailSerializer
+from authen_drf.serializers import UserListSerializer, UserDetailSerializer
 
 
 # --- Пользователь ---
