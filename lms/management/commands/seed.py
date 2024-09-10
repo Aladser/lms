@@ -1,3 +1,5 @@
+import os
+
 from django.core.management import BaseCommand
 from django.shortcuts import get_object_or_404
 
@@ -8,8 +10,8 @@ from payment.models import Payment
 
 
 class Command(BaseCommand):
-    user = User.objects.get(email='user@test.ru')
-    admin = User.objects.get(email='admin@test.ru')
+    user = User.objects.get(email=os.getenv('MY_MAIL_3')) if os.getenv('MY_MAIL_3') else User.objects.get(email='user@test.ru')
+    admin = User.objects.get(email=os.getenv('MY_MAIL_1')) if os.getenv('MY_MAIL_3') else User.objects.get(email='admin@test.ru')
 
     # курсы
     math_name = 'математика'
