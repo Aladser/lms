@@ -6,6 +6,7 @@
 * ``python manage.py createusers`` - создать пользователей
 * ``python manage.py seed`` - сидирование таблиц
 * JWT - авториазция
+* Запуск отложенных задач: ``celery -A config worker -l INFO``
 
 ## Модели
 + ``authen_drf``: ``User``, ``Country``

@@ -10,19 +10,14 @@ from libs.owner_queryset import OwnerQuerysetMixin
 from lms.models import Course, Lesson, UserSubscription
 from lms.paginators import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer
+from lms.tasks import send_course_updating_notification
 
 
 # --- КУРС ---
-# VIEWSET
 class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = CustomPagination
-
-    def perform_create(self, serializer):
-        course = serializer.save()
-        course.owner = self.request.user
-        course.save()
 
     def get_permissions(self):
         if self.action == 'create':
@@ -31,6 +26,23 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
             self.permission_classes = [IsOwnerPermission]
         return super().get_permissions()
 
+    def perform_create(self, serializer):
+        course = serializer.save()
+        course.owner = self.request.user
+        course.save()
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+        subscriptions = UserSubscription.objects.filter(course=course)
+
+        subject = f"Обновлен курс {course}"
+        message = (f""
+                   f"Название: {course.name}\n"
+                   f"Описание:{course.description}\n"
+                   f"Создан пользователем {course.owner}")
+        email_list = tuple(subscription.user.email for subscription in subscriptions)
+        send_result = send_course_updating_notification.delay(subject, message, email_list)
+        print(f"Отправка писем.\n ID={send_result}")
 
 # --- УРОК ---
 # LIST
