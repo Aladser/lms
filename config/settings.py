@@ -1,8 +1,8 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL
+import pytz
 from dotenv import load_dotenv
 
 NULLABLE = {"null": True, "blank": True}
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_rename_app',
     'django_filters',
+    'django_celery_beat',
     'drf_yasg',
 
     'authen_drf',
@@ -137,9 +138,18 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# --- Настройки Celery ---
+# CELERY
 CELERY_BROKER_URL = os.getenv("CELERY_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_URL")
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BEAT_SCHEDULE = {
+    'check_user_activities': {
+        'task': 'lms.tasks.check_user_activities',
+        'schedule': timedelta(seconds = 10),
+        'start_time': datetime.now(pytz.timezone(TIME_ZONE))
+    },
+}
+
+

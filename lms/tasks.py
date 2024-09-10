@@ -7,6 +7,8 @@ from lms.models import Course, UserSubscription
 
 @shared_task
 def send_course_updating_notification(course_id):
+    """Отправляет отложенно почтовые уведомления об обновлении курса """
+
     course =  Course.objects.get(pk=course_id)
     subscriptions = UserSubscription.objects.filter(course=course)
 
@@ -24,3 +26,8 @@ def send_course_updating_notification(course_id):
     return f"Отправлены почтовые уведомления на обновление курса {course}" if response == 1 else response
 
 
+@shared_task
+def check_user_activities():
+    """Периодическая задача проверки активности пользователя"""
+
+    return 'check_user_activities'
