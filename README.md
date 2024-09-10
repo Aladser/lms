@@ -10,17 +10,24 @@
 * запуск периодических задач: ``celery -A config worker --beat --scheduler django --loglevel=info``
 
 ## Модели
-+ ``authen_drf``: ``User``, ``Country``
++ ``authen_drf``: 
+  * ``User``:``email``, ``phone``, ``avatar``, ``token``, ``country``
+  * ``Country``
 + ``lms``: 
-  + ``Course``, 
-  + ``Lesson``, 
-  + ``UserSubscription`` - подписки пользователей на обновления курсов
+  + ``Course`` 
+    * ``name``
+    * ``description``
+    * ``preview_image``
+    * ``owner``
+    * ``updated_at`` - дата последнего обновления
+  + ``Lesson``: ``name``, ``description``, ``preview_image``, ``video_link``, ``course``, ``owner``
+  + ``UserSubscription`` (подписки пользователей на обновления курсов): ``user``, ``course``
 + ``payment``:
   * ``Payment`` - Платеж.
-    + ``user`` - пользователь
-    + ``course`` - курс
-    + ``lesson`` - урок
-    + ``amount`` - стоимость
+    + ``user``
+    + ``course``
+    + ``lesson``
+    + ``amount``
     + ``session_id`` - id stripe-сессии
     + ``link`` - ссылка на оплату
 
