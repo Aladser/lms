@@ -20,7 +20,7 @@ class LessonTestCase(APITestCase):
         self.lesson = Lesson.objects.create(**lesson_params)
 
     def test_list(self):
-        url = reverse('lms:lesson_list')
+        url = reverse('lms:lesson-list')
 
         response = self.client.get(url)
         received_lessons = response.json()
@@ -29,7 +29,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(received_lessons['count'], 1)
 
     def test_retrieve(self):
-        url = reverse('lms:lesson_retrieve', kwargs={'pk':lesson_pk})
+        url = reverse('lms:lesson-retrieve', kwargs={'pk':lesson_pk})
         response = self.client.get(url)
         received_lesson = response.json()
 
@@ -37,7 +37,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(received_lesson['name'], self.lesson.name)
 
     def test_create(self):
-        url = reverse('lms:lesson_create')
+        url = reverse('lms:lesson-create')
         sent_lesson = {
             "name": "уравнения",
             "description":"что такое уравнения",
@@ -51,7 +51,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(received_lesson['name'], sent_lesson['name'])
 
     def test_update(self):
-        url = reverse('lms:lesson_update', kwargs={'pk':lesson_pk})
+        url = reverse('lms:lesson-update', kwargs={'pk':lesson_pk})
         sent_lesson = {'name': 'степени: продолжение','description': 'решение примеров'}
 
         response  = self.client.patch(url, sent_lesson)
@@ -62,7 +62,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(received_lesson['description'], sent_lesson['description'])
 
     def test_delete(self):
-        url = reverse('lms:lesson_delete', kwargs={'pk': lesson_pk})
+        url = reverse('lms:lesson-delete', kwargs={'pk': lesson_pk})
         response  = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Lesson.objects.all().count(), 0)
@@ -74,7 +74,7 @@ class CourseTestCase(APITestCase):
         self.course = Course.objects.create(**course_params)
 
     def test_course_subscription(self):
-        url = reverse('lms:course_subscription', kwargs={'pk': course_pk})
+        url = reverse('lms:course-subscription', kwargs={'pk': course_pk})
         sent_response_str =  f'Добавлена подписка пользователя {self.user} на курс {str(self.course).title()}'
 
         response = self.client.post(url)
