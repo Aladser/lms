@@ -41,7 +41,8 @@ class CourseViewSet(OwnerQuerysetMixin, ModelViewSet):
         datetime_now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         last_updated_interval = datetime_now - course.updated_at
 
-        if last_updated_interval.total_seconds() > 60*60*4:
+        # отправляется почтовые уведомления если произошли обновления курса спустя час после последнего
+        if last_updated_interval.total_seconds() > 60:
             send_course_updating_notification.delay(course.pk)
 
         course.updated_at = datetime_now
