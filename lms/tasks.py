@@ -23,8 +23,7 @@ def send_course_updating_notification(course_id):
     email_list = tuple(subscription.user.email for subscription in subscriptions)
 
     response = send_mail(subject, message, EMAIL_HOST_USER, email_list)
-
-    if response == 1:
+    if response != 1:
         return f"Отправлены почтовые уведомления на обновление курса {course} пользователям: {', '.join(email_list)}"
     else:
         return response
