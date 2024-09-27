@@ -5,20 +5,13 @@
 + SPA веб-приложение - бэкенд-сервер, который возвращает клиенту JSON-структуры. 
 + JWT-авторизация.
 + Тесты 
-+ Работае приложения проверялась через Postman
++ Работа приложений проверялась через Postman
 
-## Настройки проекта
+## Запуск проекта
 * Создать файл *.env* в корне проекта с настройками, аналогичными *.env.example*.
-* ``python manage.py createusers`` - создать пользователей
-* ``python manage.py seed`` - сидирование таблиц
-* JWT - авторизация
-* Запуск отложенных задач: ``celery -A config worker -l INFO``
-* запуск периодических задач: ``celery -A config worker --beat --scheduler django --loglevel=info``
-
-```
-docker network create lmsnet
-docker-compose up --build
-```
+* ``docker network create lmsnet``
+* ``docker-compose up --build`` - пересобрать контейнеры
+* ``docker-compose up`` - запуск контейнеров
 
 ## Права пользователей:
 + ``IsModeratorPermission`` - проверка модератора: могут работать с любыми курсами и уроками, но не могут создавать и удалять
