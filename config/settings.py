@@ -12,7 +12,7 @@ SECRET_KEY = 'django-insecure-$=s1^jq53q=1f#=y(3-0c50nmqgqx%8_lb=nu%cf-hrme-)0d@
 DEBUG = True
 
 load_dotenv(BASE_DIR / '.env')
-SERVICE_ADDR = os.getenv('SERVICE_ADDR') if os.getenv('SERVICE_ADDR') is not None else 'http://127.0.0.1:8000'
+SERVICE_ADDR = os.getenv('SERVICE_ADDR') if os.getenv('SERVICE_ADDR') is not None else 'http://localhost:8000'
 
 ALLOWED_HOSTS = []
 
@@ -85,11 +85,11 @@ SIMPLE_JWT = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
 
